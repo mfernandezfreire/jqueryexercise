@@ -7,7 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
       body {
-        font-family: 'Trirong';
+        font-family: 'Arial';
         margin: 0;
         min-width: 100vw;
         min-height: 100vh;
@@ -25,24 +25,23 @@
         width: 25%;
       }
 
+      #headerContainer {
+        display: flex;
+        justify-content: space-around;
+        height: 10%;
+        width: 100%;
+        overflow: hidden;
+        background-color: #f1f1f1;
+      }
 
       #mainContainer {
         height: 80%;
         width: 100%;
+        padding-top: 5%;
         max-width: 100%;
-        max-height: 80%;
-        background-color: green;
+        max-height: 70%;
         border: '1px solid black';
         overflow: 'hidden';
-      }
-
-
-      #headerContainer {
-        display: flex;
-        justify-content: center;
-        height: 10%;
-        width: 100%;
-        overflow: hidden;
       }
 
       #footerContainer {
@@ -51,6 +50,19 @@
         align-items: center;
         height: 10%;
         width: 100%;
+      }
+
+      #footerIconBegin {
+        display: none;
+      }
+
+      #footerIconReset {
+        display: none;
+      }
+
+      .footerIcon {
+        width: 3%;
+        margin-left: 2%;
       }
 
       #beginRaceHeader {
@@ -67,7 +79,33 @@
         justify-content: center;
         flex-direction: column;
         width: 100%;
-        height: 100%;
+        height: 75%;
+        /* border: 1px solid black; */
+      }
+
+      #headerCarSelector {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 75%;
+      }
+
+      #headerCarSelector img {
+        width: 10%;
+        padding-bottom: 0;
+        margin-bottom: 0;
+      }
+
+      #headerCarSelector h2 {
+        margin: 0;
+        margin-bottom: 2.5rem;
+      }
+
+      #numberOfCars {
+        width: 15%;
+        height: 10%;
+        border: 1px solid black;
       }
 
       #speedWay {
@@ -124,6 +162,17 @@
       .boardRaceCar {
         max-height: 70%;
         max-width: 20%;
+      }
+
+      .button {
+        background-color: #b8b3b3;
+        border: none;
+        color: black;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
       }
 
     </style>
@@ -188,13 +237,16 @@
           $('#beginRaceHeader').show();
           $('#speedWay').show();
           $('#beginRace').show();
+          $('#footerIconBegin').show();
         })
 
         $('#beginRace').click(function () {
           raceIsOver = false;
           $('#resultsBoardRow').remove();
           $('#beginRace').hide();
+          $('#footerIconBegin').hide();
           $('#resetRace').show();
+          $('#footerIconReset').show();
           letsMakeARace();
           $('#c1')
             .promise()
@@ -226,6 +278,8 @@
           $('#speedWay').show();
           $('#raceResultsBoard').hide();
           $('#beginRace').show();
+          $('#footerIconBegin').show();
+          $('#footerIconReset').hide();
           resetRace();
         });
       }); 
@@ -234,9 +288,11 @@
 
 <body>
   <div id="headerContainer">
-    <h1 id="welcomeHeader">Bienvenido a las carreras de coches</h1>
+    <img src="./assets/racing-flag.png" />
+    <h1 id="welcomeHeader">Bienvenid@s a las carreras de coches</h1>
     <h1 id="beginRaceHeader">Empecemos la carrera</h1>
     <h1 id="resetRaceHeader">Los resultados de la carrera</h1>
+    <img src="./assets/racing-flag.png" />
   </div>
 
   <div id="mainContainer">
@@ -253,28 +309,32 @@
       </table>
     </div>
 
-    <div id="carSelector" class="custom-select" >
-      <h2>Selecciona el número de coches</h2>
+    <div id="carSelector">
+      <div id="headerCarSelector">
+        <img src="./assets/sports-car.png" />
+        <h2> Selecciona el número de coches: </h2>
+      </div>
       <select id="numberOfCars">
         <option></option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
+        <option value="2">2 Coches</option>
+        <option value="3">3 Coches</option>
+        <option value="4">4 Coches</option>
+        <option value="5">5 Coches</option>
+        <option value="6">6 Coches</option>
+        <option value="7">7 Coches</option>
+        <option value="8">8 Coches</option>
+        <option value="9">9 Coches</option>
       </select>
     </div>
 
   </div>
 
   <div id="footerContainer">
-    <input type="button" id="beginRace" value="¡Comenzar!">
-    <input type="button" id="resetRace" value="¡Reiniciar!">
+    <button id="beginRace" class="button">¡Comenzar!</button>
+    <button id="resetRace" class="button">¡Reiniciar!</button>
+    <img id="footerIconBegin" class="footerIcon" src="./assets/racing.png" />
+    <img id="footerIconReset" class="footerIcon" src="./assets/reset.png" />
   </div>
-
 
 </body>
 
