@@ -1,0 +1,281 @@
+<html>
+
+<head>
+  <FINISH_GOAL http-equiv="content-type" content="text/html" ; charset="UTF-8">
+    <title>Carreras de coches!!</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+      body {
+        font-family: 'Trirong';
+        margin: 0;
+        min-width: 100vw;
+        min-height: 100vh;
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        width: 25%;
+      }
+
+
+      #mainContainer {
+        height: 80%;
+        width: 100%;
+        max-width: 100%;
+        max-height: 80%;
+        background-color: green;
+        border: '1px solid black';
+        overflow: 'hidden';
+      }
+
+
+      #headerContainer {
+        display: flex;
+        justify-content: center;
+        height: 10%;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      #footerContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 10%;
+        width: 100%;
+      }
+
+      #beginRaceHeader {
+        display: none;
+      }
+
+      #resetRaceHeader {
+        display: none;
+      }
+
+      #carSelector {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+      }
+
+      #speedWay {
+        display: none;
+        height: 100%;
+        max-height: 100%;
+        padding: 10px;
+        margin-bottom: 2em;
+      }
+
+      #raceResultsBoard {
+        display: none;
+      }
+
+      #raceResultsTable {
+        width: 95%;
+        height: 50%;
+      }
+
+      #beginRace {
+        display: none;
+      }
+
+      #resetRace {
+        display: none;
+      }
+
+      .track {
+        position: relative;
+        border-bottom: 2px solid white;
+        border-bottom-style: dashed;
+        background-color: grey;
+        width: 100%;
+        height: 10%;
+        z-index: 0;
+      }
+
+      .finishGoal {
+        width: 85%;
+        height: 100%;
+        border-right: 2rem solid white;
+        position: absolute;
+        z-index: -1;
+      }
+
+      .car {
+        margin-left: 0%;
+        margin: 1%;
+        max-height: 70%;
+        max-width: 10%;
+        z-index: 5;
+      }
+
+      .boardRaceCar {
+        max-height: 70%;
+        max-width: 20%;
+      }
+
+    </style>
+    <script>
+      let raceIsOver = false;
+      let FINISH_GOAL = 83;
+      let raceCars = [];
+      function RaceCar(carNumber) {
+        this.num = carNumber;
+        this.pos = 0;
+        // Método que incrementa la posición del coche 
+        this.turbo = function (newPosition) {
+          this.pos += newPosition;
+          $('#c' + this.num).animate({ 'margin-left': this.pos + '%' }, 400);
+          return this.pos;
+        }
+        // Devolvemos el coche a la posición inicial 
+        this.finishAndReset = function () {
+          this.pos = 0;
+          $('#c' + this.num).finish();
+          $('#c' + this.num).animate({ 'margin-left': this.pos + '%' }, 400);
+        }
+      }
+      function getCars(cars) {
+        for (var i = 0; i < cars; ++i) {
+          raceCars[i] = new RaceCar(i + 1);
+        }
+      }
+      // Realizar la carrera hasta que algún coche llegue a la FINISH_GOAL 
+      function letsMakeARace() {
+        console.log('entra');
+        var max = 0;
+        var tmpPos;
+        while (raceCars[max].pos < FINISH_GOAL) {
+          for (var j = 0; j < raceCars.length; ++j) {
+            tmpPos = raceCars[j].turbo(Math.floor(Math.random() * 10 + 1));
+            max = (tmpPos < raceCars[max].pos) ? max : j;
+          }
+        }
+      }
+      // Devolver todos los coches a su posición inicial 
+      function resetRace() {
+        for (var i = 0; i < raceCars.length; ++i) {
+          raceCars[i].finishAndReset();
+        }
+      }
+
+      // Inicializamos los coches y asignamos eventos al comenzar.
+      $(document).ready(function () {
+        $('#numberOfCars').change(function () {
+          let numberOfCars = $("#numberOfCars").val();
+          for (let i = 0; i <= numberOfCars; i++) {
+            if (i > 1) {
+              const assetPath = "./assets/car" + i + ".png";
+              const numberOfTrack = i;
+              $('#speedWay').append(`<div class="track"><div class="finishGoal"></div><img src="${assetPath}" id="c${numberOfTrack}" class="car" /></div>`)
+            }
+          }
+          getCars(numberOfCars);
+          $('#carSelector').hide();
+          $('#welcomeHeader').hide();
+          $('#beginRaceHeader').show();
+          $('#speedWay').show();
+          $('#beginRace').show();
+        })
+
+        $('#beginRace').click(function () {
+          raceIsOver = false;
+          $('#resultsBoardRow').remove();
+          $('#beginRace').hide();
+          $('#resetRace').show();
+          letsMakeARace();
+          $('#c1')
+            .promise()
+            .done(function () {
+              $('#raceResultsTable').empty();
+              if (!raceIsOver) {
+                const raceCarsSorted = raceCars.sort((a, b) => b.pos - a.pos);
+                for (let i = 0; i < raceCarsSorted.length; i++) {
+                  if (i === 0) {
+                    $('#raceResultsTable').append('<tr><th>Ranking</th><th>Miles Achieved</th><th>RaceCar</th></tr>');
+                  }
+                  const assetPath = "./assets/car" + (i + 1) + ".png";
+                  $('#raceResultsTable').append(`<tr id="resultsBoardRow"><td>${i + 1}</td><td>${raceCarsSorted[i].pos}</td><td><img class="boardRaceCar" src="${assetPath}"/></td></tr>`);
+                }
+                $('#beginRaceHeader').hide();
+                $('#resetRaceHeader').show();
+                $('#speedWay').hide();
+                $('#raceResultsBoard').show();
+              }
+            },
+            );
+        });
+
+        $('#resetRace').click(function () {
+          $(this).hide();
+          raceIsOver = true;
+          $('#beginRaceHeader').show();
+          $('#resetRaceHeader').hide();
+          $('#speedWay').show();
+          $('#raceResultsBoard').hide();
+          $('#beginRace').show();
+          resetRace();
+        });
+      }); 
+    </script>
+</head>
+
+<body>
+  <div id="headerContainer">
+    <h1 id="welcomeHeader">Bienvenido a las carreras de coches</h1>
+    <h1 id="beginRaceHeader">Empecemos la carrera</h1>
+    <h1 id="resetRaceHeader">Los resultados de la carrera</h1>
+  </div>
+
+  <div id="mainContainer">
+
+    <div id="speedWay">
+      <div class="track">
+        <div class="finishGoal"></div>
+        <img src="./assets/car1.png" id="c1" class="car" />
+      </div>
+    </div>
+
+    <div id="raceResultsBoard">
+      <table id="raceResultsTable">
+      </table>
+    </div>
+
+    <div id="carSelector" class="custom-select" >
+      <h2>Selecciona el número de coches</h2>
+      <select id="numberOfCars">
+        <option></option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+      </select>
+    </div>
+
+  </div>
+
+  <div id="footerContainer">
+    <input type="button" id="beginRace" value="¡Comenzar!">
+    <input type="button" id="resetRace" value="¡Reiniciar!">
+  </div>
+
+
+</body>
+
+</html>
