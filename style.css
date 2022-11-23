@@ -1,0 +1,200 @@
+ /* Estilos que aplican a todo el DOCUMENTO */
+ body {
+  font-family: 'Arial';
+  margin: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  width: 25%;
+  padding-left: 2%;
+}
+
+/* Estilos de los contenedores principales */
+
+/* Contenedor HEADER */
+#headerContainer {
+  display: flex;
+  justify-content: space-around;
+  height: 10%;
+  width: 100%;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+/* Contenedor BODY */
+#mainContainer {
+  height: 80%;
+  width: 100%;
+  padding-top: 5%;
+  max-width: 100%;
+  max-height: 70%;
+  border: '1px solid black';
+  overflow: 'hidden';
+}
+
+/* Contenedor FOOTER */
+#footerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10%;
+  width: 100%;
+}
+
+/* Icono BUTTON 'EMPEZAR' */
+#footerIconBegin {
+  display: none;
+}
+
+/* Icono BUTTON 'REINICIAR' */
+#footerIconReset {
+  display: none;
+}
+
+/* BUTTONS */
+.footerIcon {
+  width: 3%;
+  margin-left: 2%;
+}
+
+/* BUTTON EMPEZAR */
+#beginRace {
+  display: none;
+}
+
+/* BUTTON RESET */
+#resetRace {
+  display: none;
+}
+
+/* Estilos Botones */
+.button {
+  background-color: #b8b3b3;
+  border: none;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+/* ID's HEADERS */
+
+/* HEADER 'BIENVENIDOS....' */
+#beginRaceHeader {
+  display: none;
+}
+
+/* HEADER 'RESULTADOS...' */
+#resetRaceHeader {
+  display: none;
+}
+
+/* Estilos Contenedor SELECTOR DE COCHES */
+
+/* Contenedor SELECTOR DE COCHES */
+#carSelector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 75%;
+}
+
+/* HEADER SELECTOR DE COCHES*/
+#headerCarSelector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 75%;
+}
+
+/* Imagen SELECTOR DE COCHES */
+#headerCarSelector img {
+  width: 10%;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+/* H2 SELECTOR DE COCHES */
+#headerCarSelector h2 {
+  margin: 0;
+  margin-bottom: 2.5rem;
+}
+
+/* SELECT SELECTOR DE COCHES */
+#numberOfCars {
+  width: 15%;
+  height: 10%;
+  border: 1px solid black;
+}
+
+/* Contenedor SPEEDWAY */
+#speedWay {
+  display: none;
+  height: 100%;
+  max-height: 100%;
+  padding: 10px;
+  margin-bottom: 2em;
+}
+
+/* Contenedor TABLA DE RESULTADOS */
+#raceResultsBoard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+}
+
+/* TABLA DE RESULTADOS */
+#raceResultsTable {
+  width: 95%;
+  height: 100%;
+}
+
+/* PISTA POR COCHE */
+.track {
+  position: relative;
+  border-bottom: 2px solid white;
+  border-bottom-style: dashed;
+  background-color: grey;
+  width: 100%;
+  height: 10%;
+  z-index: 0;
+}
+
+/* LINEA DE META */
+.finishGoal {
+  width: 90%;
+  height: 100%;
+  border-right: 2rem solid white;
+  position: absolute;
+  z-index: -1;
+}
+
+/* COCHES */
+.car {
+  margin-left: 0%;
+  margin: 1%;
+  max-height: 70%;
+  max-width: 10%;
+  z-index: 5;
+}
+
+.boardRaceCar {
+  max-height: 70%;
+  max-width: 20%;
+}

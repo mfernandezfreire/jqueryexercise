@@ -2,228 +2,101 @@
 
 <head>
   <FINISH_GOAL http-equiv="content-type" content="text/html" ; charset="UTF-8">
-    <title>Carreras de coches!!</title>
+    <title>¡¡Carreras de coches!!</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <style>
-      body {
-        font-family: 'Arial';
-        margin: 0;
-        min-width: 100vw;
-        min-height: 100vh;
-      }
-
-      table,
-      th,
-      td {
-        border: 1px solid black;
-        border-collapse: collapse;
-      }
-
-      th,
-      td {
-        width: 25%;
-      }
-
-      #headerContainer {
-        display: flex;
-        justify-content: space-around;
-        height: 10%;
-        width: 100%;
-        overflow: hidden;
-        background-color: #f1f1f1;
-      }
-
-      #mainContainer {
-        height: 80%;
-        width: 100%;
-        padding-top: 5%;
-        max-width: 100%;
-        max-height: 70%;
-        border: '1px solid black';
-        overflow: 'hidden';
-      }
-
-      #footerContainer {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 10%;
-        width: 100%;
-      }
-
-      #footerIconBegin {
-        display: none;
-      }
-
-      #footerIconReset {
-        display: none;
-      }
-
-      .footerIcon {
-        width: 3%;
-        margin-left: 2%;
-      }
-
-      #beginRaceHeader {
-        display: none;
-      }
-
-      #resetRaceHeader {
-        display: none;
-      }
-
-      #carSelector {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        width: 100%;
-        height: 75%;
-        /* border: 1px solid black; */
-      }
-
-      #headerCarSelector {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 75%;
-      }
-
-      #headerCarSelector img {
-        width: 10%;
-        padding-bottom: 0;
-        margin-bottom: 0;
-      }
-
-      #headerCarSelector h2 {
-        margin: 0;
-        margin-bottom: 2.5rem;
-      }
-
-      #numberOfCars {
-        width: 15%;
-        height: 10%;
-        border: 1px solid black;
-      }
-
-      #speedWay {
-        display: none;
-        height: 100%;
-        max-height: 100%;
-        padding: 10px;
-        margin-bottom: 2em;
-      }
-
-      #raceResultsBoard {
-        display: none;
-      }
-
-      #raceResultsTable {
-        width: 95%;
-        height: 50%;
-      }
-
-      #beginRace {
-        display: none;
-      }
-
-      #resetRace {
-        display: none;
-      }
-
-      .track {
-        position: relative;
-        border-bottom: 2px solid white;
-        border-bottom-style: dashed;
-        background-color: grey;
-        width: 100%;
-        height: 10%;
-        z-index: 0;
-      }
-
-      .finishGoal {
-        width: 85%;
-        height: 100%;
-        border-right: 2rem solid white;
-        position: absolute;
-        z-index: -1;
-      }
-
-      .car {
-        margin-left: 0%;
-        margin: 1%;
-        max-height: 70%;
-        max-width: 10%;
-        z-index: 5;
-      }
-
-      .boardRaceCar {
-        max-height: 70%;
-        max-width: 20%;
-      }
-
-      .button {
-        background-color: #b8b3b3;
-        border: none;
-        color: black;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-      }
-
-    </style>
     <script>
+
+      // Definimos las variables globales entre las que se incluyen
+      /*
+        raceIsOver -> Indica que la carrera ha finalizado
+        FINISHGOAL -> Indica donde se encuentra la línea de meta
+        raceCars -> Array que contendrá los coches de carreras 
+      */
       let raceIsOver = false;
       let FINISH_GOAL = 83;
       let raceCars = [];
+
+
+      /*
+        Clase que establece los valores iniciales de cada coche 
+      */
+
       function RaceCar(carNumber) {
         this.num = carNumber;
         this.pos = 0;
-        // Método que incrementa la posición del coche 
+
+        // Establece la nueva posición del coche y sus animaciones
         this.turbo = function (newPosition) {
           this.pos += newPosition;
-          $('#c' + this.num).animate({ 'margin-left': this.pos + '%' }, 400);
+          $('#c' + this.num).animate({ 'margin-left': this.pos + '%' }, 100);
           return this.pos;
         }
-        // Devolvemos el coche a la posición inicial 
+
+        // Establece los valores iniciales del coche y sus animaciones
         this.finishAndReset = function () {
           this.pos = 0;
           $('#c' + this.num).finish();
-          $('#c' + this.num).animate({ 'margin-left': this.pos + '%' }, 400);
+          $('#c' + this.num).animate({ 'margin-left': this.pos + '%' }, 100);
         }
       }
+
+      // Establece el número de coches que contendrá el array raceCars
       function getCars(cars) {
-        for (var i = 0; i < cars; ++i) {
+        for (let i = 0; i < cars; ++i) {
           raceCars[i] = new RaceCar(i + 1);
         }
       }
-      // Realizar la carrera hasta que algún coche llegue a la FINISH_GOAL 
+
+      // Función que realiza los calculos de la carrera
       function letsMakeARace() {
-        console.log('entra');
-        var max = 0;
-        var tmpPos;
-        while (raceCars[max].pos < FINISH_GOAL) {
-          for (var j = 0; j < raceCars.length; ++j) {
-            tmpPos = raceCars[j].turbo(Math.floor(Math.random() * 10 + 1));
-            max = (tmpPos < raceCars[max].pos) ? max : j;
+
+        /*
+          max = valor inicial de posición
+        */
+        let max = 0;
+
+        // Comprobamos que el valor máximo de posición de los coches no sea superior a la posición de meta
+        while (max < FINISH_GOAL) {
+
+          // Recorremos el array de coches para establecer las nuevas posiciones
+          for (let j = 0; j < raceCars.length; ++j) {
+
+            // Sumamos un valor randon entre 1 y 10 a la posición de cada coche
+            raceCars[j].turbo(Math.floor(Math.random() * 10 + 1));
+
+            // Organizamos los coches por posición;
+            const maxRaceCarPosition = raceCars.sort((a, b) => b.pos - a.pos);
+
+            // Establecemos el valor de posición más alta
+            max = maxRaceCarPosition[0].pos;
           }
         }
       }
-      // Devolver todos los coches a su posición inicial 
+
+      // Reseteamos los valores de los coches recorriendo el array que los contiene
       function resetRace() {
-        for (var i = 0; i < raceCars.length; ++i) {
+        for (let i = 0; i < raceCars.length; ++i) {
           raceCars[i].finishAndReset();
         }
       }
 
-      // Inicializamos los coches y asignamos eventos al comenzar.
+      // Asignamos los eventos que vamos a realizar
       $(document).ready(function () {
+
+        // Ocultamos la tabla de resultados
+        $('#raceResultsBoard').hide();
+
+        // Recoge el SELECTOR DE COCHES y establece los valores básicos de la carrera
         $('#numberOfCars').change(function () {
+
+          // Obtinen el valor del selector
           let numberOfCars = $("#numberOfCars").val();
+
+          /*
+            Establece los elementos que corresponden a las carreteras por los que circulan los coches
+          */
           for (let i = 0; i <= numberOfCars; i++) {
             if (i > 1) {
               const assetPath = "./assets/car" + i + ".png";
@@ -231,59 +104,122 @@
               $('#speedWay').append(`<div class="track"><div class="finishGoal"></div><img src="${assetPath}" id="c${numberOfTrack}" class="car" /></div>`)
             }
           }
+
+          // Esablece el array con los coches 
           getCars(numberOfCars);
+
+          // Oculta el SELECTOR DE COCHES y el HEADER de BIENVENIDA
           $('#carSelector').hide();
           $('#welcomeHeader').hide();
+
+          // Muestra el HEADER de comienzo de carrera
           $('#beginRaceHeader').show();
+
+          // Muestra la PISTA DE CARRERAS
           $('#speedWay').show();
+
+          // Muestra el BOTON y el ICONO de 'EMPEZAR'
           $('#beginRace').show();
           $('#footerIconBegin').show();
+
         })
 
+        // Controla los eventos asociados a id beginRace
         $('#beginRace').click(function () {
+
+          // Establecemos el valor inicial para resetear la carrera
           raceIsOver = false;
-          $('#resultsBoardRow').remove();
+
+          // Ocultamos los BOTONES e ICONO de 'COMENZAR' la carrera
           $('#beginRace').hide();
           $('#footerIconBegin').hide();
+
+          // Mostramos los BOTONES e ICONO de 'REINICIAR' la carrera
           $('#resetRace').show();
           $('#footerIconReset').show();
+
+          // Iniciamos la función que establecerá los valores de la carrera
           letsMakeARace();
+
+          // Esta función nos permite observar las animaciones cómo promesas y establecer los valores de finalización de carrera
           $('#c1')
             .promise()
             .done(function () {
               $('#raceResultsTable').empty();
+
+              // Si la carrera no ha terminado, es decir, si nadie a pulsado el botón reiniciar mostramos la tabla de resultados de la carrera
               if (!raceIsOver) {
+
+                // Organizamos los coches por las posiciones
                 const raceCarsSorted = raceCars.sort((a, b) => b.pos - a.pos);
+
+                // Recorremos el array organizado para crear nuestra tabla de resultados
                 for (let i = 0; i < raceCarsSorted.length; i++) {
+
+                  // Si es la primera posición del array añadimos los HEADERS de la TABLE
                   if (i === 0) {
                     $('#raceResultsTable').append('<tr><th>Ranking</th><th>Miles Achieved</th><th>RaceCar</th></tr>');
                   }
-                  const assetPath = "./assets/car" + (i + 1) + ".png";
+
+                  // Escogemos el path de cada uno de los coches en relación a su número
+                  const assetPath = "./assets/car" + (raceCarsSorted[i].num) + ".png";
+
+                  // Añadimos las filas a la tabla
                   $('#raceResultsTable').append(`<tr id="resultsBoardRow"><td>${i + 1}</td><td>${raceCarsSorted[i].pos}</td><td><img class="boardRaceCar" src="${assetPath}"/></td></tr>`);
+
                 }
+
+                // Ocultamos el HEADER de 'Comienzo de carrera'
                 $('#beginRaceHeader').hide();
+
+                // Mostramos el HEADER de 'finalización de carrera'
                 $('#resetRaceHeader').show();
+
+                // Ocultamos la PISTA de carreras
                 $('#speedWay').hide();
+
+                // Mostramos la TABLA de resultados
                 $('#raceResultsBoard').show();
               }
             },
             );
         });
 
+        // Controla los eventos asociados a id beginRace
         $('#resetRace').click(function () {
+
+          // Oculta el BOTON 'Reiniciar'
           $(this).hide();
+
+          // Al resetear la carrera establecemos este valor para que no realice las acciones que finalizan la carrera
           raceIsOver = true;
+
+          // Mostramos el HEADER que corresponde a 'Comienzo de carrera'
           $('#beginRaceHeader').show();
+
+          // Ocultamos el HEADER que corresponde a 'Finalización de carrera' 
           $('#resetRaceHeader').hide();
+
+          // Mostramos la PISTA de CARRERAS
           $('#speedWay').show();
+
+          //  Ocultamos la tabla de resultados
           $('#raceResultsBoard').hide();
+
+          // Mostramos el BOTON 'Comenzar'
           $('#beginRace').show();
+
+          // Mostramos el Icono de 'COMENZAR' en el FOOTER
           $('#footerIconBegin').show();
+
+          // Ocultamos el icono de 'REINICIAR' en el FOOTER
           $('#footerIconReset').hide();
           resetRace();
         });
       }); 
+
     </script>
+
 </head>
 
 <body>
@@ -330,7 +266,7 @@
   </div>
 
   <div id="footerContainer">
-    <button id="beginRace" class="button">¡Comenzar!</button>
+    <button id="beginRace" class="button">¡Iniciar!</button>
     <button id="resetRace" class="button">¡Reiniciar!</button>
     <img id="footerIconBegin" class="footerIcon" src="./assets/racing.png" />
     <img id="footerIconReset" class="footerIcon" src="./assets/reset.png" />
